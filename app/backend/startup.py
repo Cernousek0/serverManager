@@ -9,7 +9,7 @@ def startApp():
 
 
 def startReact():
-    webview.create_window('My React App', 'http://127.0.0.1:3000')
+    webview.create_window('My React App', 'http://127.0.0.1:3000',width=900, height=600)
     webview.start()
 
 def startUvicorn():
