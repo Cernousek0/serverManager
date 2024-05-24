@@ -2,3 +2,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Dongle';
+  src: url('../public/fonts/Dongle-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Dongle';
+  src: url('../public/fonts/Dongle-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Dongle';
+  src: url('../public/fonts/Dongle-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Mono';
+  src: url('../public/fonts/FiraMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Mono';
+  src: url('../public/fonts/FiraMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Mono';
+  src: url('../public/fonts/FiraMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Doppio One';
+  src: url('../public/fonts/DoppioOne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.fd {
+  font-family: 'Dongle', sans-serif;
+}
+.fm {
+  font-family: 'Fira Mono', monospace;
+}
+.fdp {
+  font-family: 'Doppio One', sans-serif;
+}
+  
