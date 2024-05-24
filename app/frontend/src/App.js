@@ -2,21 +2,34 @@ import logo from './logo.svg';
 import './App.css';
 import './tailwind.css';
 import "./index.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   const [serverName, setServerName] = useState('');
   const [setupServer, setSetup] = useState(false);
+
+
   return (
     <div className="flex h-screen w-full">
       <div className='w-full flex-col'>
       <div className="bg-white text-red h-12 w-full flex items-center justify-start border-b border-[#DCDCDC]">
         <h1 className="text-2xl p-2 fdp flex-row flex gap-2">ServerSphere<img className='w-7' src='./serversphere_logo.png'></img></h1>
       </div>
-      <div className=" text-red h-5/6 w-full flex items-center justify-center">
-        <div className='flex flex-col items-center justify-center bg-[#ECECEC] border-[#BFBFBF] border w-2/3 h-48 rounded-xl text-[#BFBFBF] hover:text-[#9C9C9C] duration-300 ease-in-out cursor-pointer'>
+      <div className="text-red h-5/6 w-full flex items-center justify-center">
+        <div className={`${setupServer ? "h-5/6" : "h-48"} flex flex-col items-center justify-center bg-[#ECECEC] border-[#BFBFBF] border w-2/3 rounded-xl text-[#BFBFBF] hover:text-[#9C9C9C] duration-300 ease-in-out cursor-pointer`} onClick={() => setSetup(true)}>
+        {setupServer ? (
+        <> 
+          <p className='fm'>SETUP SERVER</p>
+          <p className='fm text-4xl'>+</p>
+          <input type='text'></input>
+        </>
+        ) : (
+        <>
           <p className='fm'>CREATE NEW SERVER</p>
           <p className='fm text-4xl'>+</p>
+        </>
+        )
+        }
         </div>
       </div>
       </div>
