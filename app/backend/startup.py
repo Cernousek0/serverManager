@@ -9,21 +9,27 @@ APP_URL = APP_IP + ":" + str(APP_PORT)
 
 def startApp():
     print("Starting App...")
-    # startUvicorn()
+    startUvicorn()
     
     ## starting React in different thread
-    WebViewThread = threading.Thread(target=startReact)
-    WebViewThread.start()
-    startWebView()
+    # WebViewThread = threading.Thread(target=startReact).start()
+    # startWebView()
 
 
 def startReact():
     print("React App started...")
     subprocess.run(["npm", "start"], cwd="app/frontend", shell=True)
 
+def stopReact():
+    print("React App stopped...")
+    subprocess.run(["npm", "stop"], cwd="app/frontend", shell=True)
+
+
 def startWebView():
-    webview.create_window('ServerSphere | Host All You Want!', APP_URL, width=1000)
+    window = webview.create_window('ServerSphere | Host All You Want!', APP_URL, width=900, height=600)
+    window.events.closing += stopReact
     webview.start()
+    
 
 
 def startUvicorn():

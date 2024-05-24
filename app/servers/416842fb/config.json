@@ -1,0 +1,17 @@
+{
+   "created_by": "kokot",
+   "name": "Muj svet pico",
+   "game": "Minecraft",
+   "version": "1.8.9",
+   "created_at": "2021-09-01",
+   "type": "Forge",
+   "mods": {
+      "Optifine": "0.47.8",
+      "Create": "1.50.8"
+   },
+   "plugins": {
+      "Dynmap": "8.4.5",
+      "Chunky": "1.20.2",
+      "Let Me Despawn": "1.20.2"
+   }
+}

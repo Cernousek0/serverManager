@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.requests import Request
+import os
+import json
+import uuid
 
 app = FastAPI()
 
+serverFilesPath = "app/servers/"
 ## home page (create or select server)
 @app.get("/")
 def index():
@@ -19,11 +24,12 @@ def get_server(server_id : str):
     return serverConfig
 
 ## create or delete server
-@app.post("/server/create/{user_id}")
-def create_server(user_id: str):
+@app.post("/server/create")
+async def create_server(request: Request):
+    payload = await request.json()
 
-
-    return {"status": "server created", "userid": user_id}
+    server = createServerConfig(payload["user_id"], payload["name"], payload["game"], payload["version"], "2021-09-01", payload["type"] ,payload["mods"], payload["plugins"])
+    return server
 
 @app.post("/server/{server_id}/delete")
 def delete_server(server_id: str):
@@ -59,21 +65,42 @@ def restart_server(server_id: str):
 
 # check if server exists in files
 def isServerValid(server_id: str):
-    if server_id in ["server1", "server2", "server3"]:
+    if server_id in os.listdir(serverFilesPath):
         return True
 
 
 # gets server config file
 def getServerConfig(server_id: str):
-    # return {"server1": {"game": "minecraft", "port": 25565}, "server2": {"game": "terraria", "port": 7777}, "server3": {"game": "factorio", "port": 34197}}
-    return
+    path = os.path.join(serverFilesPath, server_id, "config.json")
+    return json.load(open(path, "r"))
 
 
+# create server
+def createServerConfig(user_id, name, game, version, created_at, type, mods, plugins):
 
-# create 
-def createServerFiles(game, version):
-    
+    server_id = str(uuid.uuid4())[:8]
+    path = serverFilesPath + server_id
 
-    return
+    # create server folder
+    os.makedirs(path, exist_ok=True)
+
+    # setup config file
+    config_file = os.path.join(path, "config.json")
+    cofing_data = {
+        "created_by": user_id,
+        "name": name,
+        "game" : game,
+        "version": version,
+        "created_at": created_at,
+        "type": type,
+        "mods": mods,
+        "plugins": plugins
+    }
+
+    # write config file
+    with open(config_file, "w") as f:
+        json.dump(cofing_data, f, indent=3)
+
+    return server_id
 
 
