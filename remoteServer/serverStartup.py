@@ -8,19 +8,20 @@ def startServer():
     ## load env variables
     load_dotenv()
 
-    startDB()
-    # startUvicorn()
+    # startDB()
+    startUvicorn()
 
 
 def startUvicorn():
     ## start hosting
     print("Starting Server...")
-    uvicorn.run("server:app", port=6000, log_level="debug", reload=True)
+    uvicorn.run("server:server", port=6000, log_level="debug", reload=True)
 
 def startDB():
     ## db connection
-    print("Starting DB...")
-    init_db(os.getenv("DB_USER"), os.getenv("DB_HOST"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"), os.getenv("DB_PORT"))
+    # print("Starting DB...")
+    # init_db(os.getenv("DB_USER"), os.getenv("DB_HOST"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"), os.getenv("DB_PORT"))
+    return
 
 
 

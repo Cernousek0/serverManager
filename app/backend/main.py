@@ -4,16 +4,27 @@ from fastapi.requests import Request
 import os
 import json
 import uuid
+import requests
+import re
+import time
 
 app = FastAPI()
 
 serverFilesPath = "app/servers/"
-## home page (create or select server)
-@app.get("/")
-def index():
-    return {"index"}   
+remoteServerUrl = "http://localhost:6000/"
 
-## get selected server console
+# get all servers
+@app.get("/server/all")
+def getAllServers():
+    folders = os.listdir(serverFilesPath)
+    servers = []
+    for folder in folders:
+        if os.path.isdir(os.path.join(serverFilesPath, folder)):
+            servers.append(folder)
+
+    return servers
+
+# get selected server console
 @app.get("/server/{server_id}")
 def get_server(server_id : str):
 
@@ -23,20 +34,25 @@ def get_server(server_id : str):
     serverConfig = getServerConfig(server_id)
     return serverConfig
 
-## create or delete server
+# create server
 @app.post("/server/create")
 async def create_server(request: Request):
     payload = await request.json()
 
-    server = createServerConfig(payload["user_id"], payload["name"], payload["game"], payload["version"], "2021-09-01", payload["type"] ,payload["mods"], payload["plugins"])
-    return server
+    config = createServerConfig(payload["user_id"], payload["name"], payload["game"], payload["version"], "2021-09-01", payload["type"] ,payload["mods"], payload["plugins"])
+    if("error" in config):
+        return config
+    
+    return downloadServerFiles(config['serverId'], payload["game"], payload["version"], payload["type"])
 
+
+# delete server
 @app.post("/server/{server_id}/delete")
 def delete_server(server_id: str):
     return {"status": "server deleted", "server_id": server_id}
 
 
-## server controller
+# server controller
 @app.get("/server/{server_id}/start")
 def start_server(server_id: str):
     return {"status": "server started", "server_id": server_id}
@@ -47,7 +63,9 @@ def stop_server(server_id: str):
 
 @app.get("/server/{server_id}/restart")
 def restart_server(server_id: str):
-    return {"status": "server restarted"}
+    stop_server(server_id)
+    time.sleep(5)
+    start_server(server_id)
 
 
 # json = {
@@ -78,6 +96,18 @@ def getServerConfig(server_id: str):
 # create server
 def createServerConfig(user_id, name, game, version, created_at, type, mods, plugins):
 
+   ## check if game is valid
+    if game not in ["Minecraft"]:
+        return {"error": "Game not supported"}
+    
+        ## check if server type is valid
+    if type not in ["forge", "vanilla", "fabric"]:
+        return {"error": "Server type not supported"}
+    
+    ## check if version is valid
+    if not isValidVersion(game, version):
+        return {"error": "Invalid version"}
+    
     server_id = str(uuid.uuid4())[:8]
     path = serverFilesPath + server_id
 
@@ -101,6 +131,60 @@ def createServerConfig(user_id, name, game, version, created_at, type, mods, plu
     with open(config_file, "w") as f:
         json.dump(cofing_data, f, indent=3)
 
-    return server_id
+    return {"server_id": server_id}
+
+
+def downloadServerFiles(server_id: str, game: str, version: str, type: str):
+
+    
+
+    
+    url = f"https://mcutils.com/api/server-jars/{type}/{version}/download"
+    
+    # default filename incase download doesn't have it
+    filename = server_id    
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        content_disposition = response.headers.get('content-disposition')
+        if content_disposition:
+            filename = re.findall('filename="(.+)"', content_disposition)[0]
+
+        file_path = os.path.join(f"{serverFilesPath}/{server_id}", f"{filename}.jar")
+
+        if response.status_code != 200:
+            return {"error": "Server files not found"}
+        
+        ## save the file
+        with open(file_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+    except requests.RequestException as e:
+        return {"error": str(e)}
+    except PermissionError as e:
+        return {"error": f"Permission denied: {e}"}
+    except Exception as e:
+        return {"error": f"An error occurred: {e}"}
+    
+    return {"success": True, "path": file_path}
+
+def isValidVersion(game: str, version: str):
+
+    try:
+        ## get versions from server
+        response = requests.get(remoteServerUrl + "api/versions/" + game)
+        data = response.json()
+        return version in data["versions"]
+    except Exception as e:
+        return {"error": f"An error occurred: {e}"}
+
+
+    
+
+
+
+
 
 

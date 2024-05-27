@@ -9,11 +9,11 @@ APP_URL = APP_IP + ":" + str(APP_PORT)
 
 def startApp():
     print("Starting App...")
-    # startUvicorn()
+    startUvicorn()
     
     ## starting React in different thread
-    WebViewThread = threading.Thread(target=startReact).start()
-    startWebView()
+    # WebViewThread = threading.Thread(target=startReact).start()
+    # startWebView()
 
 
 def startReact():
