@@ -16,14 +16,14 @@ remoteServerUrl = "http://localhost:6000/"
 # get all servers
 @app.get("/server/all")
 def getAllServers():
-    folders = os.listdir(serverFilesPath)
     servers = []
-    for folder in folders:
-        if os.path.isdir(os.path.join(serverFilesPath, folder)):
-            servers.append(folder)
+    for folder in os.listdir(serverFilesPath):
+        configFile = os.path.join(serverFilesPath, folder, "config.json")
+        if os.path.exists(configFile):
+           servers.append(json.load(open(configFile, "r")))
 
     return servers
-
+            
 # get selected server console
 @app.get("/server/{server_id}")
 def get_server(server_id : str):

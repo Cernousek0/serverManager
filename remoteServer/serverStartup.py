@@ -1,30 +1,21 @@
 import uvicorn
-from database import init_db
 import os
 from dotenv import load_dotenv
 
+db = None
 
 def startServer():
-    ## load env variables
-    load_dotenv()
 
-    # startDB()
+    # start server
     startUvicorn()
 
 
 def startUvicorn():
-    ## start hosting
+    # start hosting
     print("Starting Server...")
     uvicorn.run("server:server", port=6000, log_level="debug", reload=True)
 
-def startDB():
-    ## db connection
-    # print("Starting DB...")
-    # init_db(os.getenv("DB_USER"), os.getenv("DB_HOST"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"), os.getenv("DB_PORT"))
-    return
 
-
-
-## Server Start
+# Server Start
 if __name__ == "__main__":
     startServer()

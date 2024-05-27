@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -182.128,
-    "scrollLeft": -158.0533,
+    "scrollTop": -105.128,
+    "scrollLeft": -222.0533,
     "zoomLevel": 0.8,
     "show": 431,
     "database": 4,
@@ -230,7 +230,7 @@
         "tableId": "ME2uS7XTo6w4jGJuBseLl",
         "name": "id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "Auto Increment",
         "options": 10,
         "ui": {
@@ -241,7 +241,7 @@
           "widthDefault": 84
         },
         "meta": {
-          "updateAt": 1716791731260,
+          "updateAt": 1716793458768,
           "createAt": 1716462676407
         }
       },
@@ -250,7 +250,7 @@
         "tableId": "rum5p-OyR-HJxjRWhpcL5",
         "name": "id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "Autu Increment",
         "options": 10,
         "ui": {
@@ -261,7 +261,7 @@
           "widthDefault": 84
         },
         "meta": {
-          "updateAt": 1716791734598,
+          "updateAt": 1716793461435,
           "createAt": 1716462699054
         }
       },
@@ -290,7 +290,7 @@
         "tableId": "rum5p-OyR-HJxjRWhpcL5",
         "name": "user_id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "Auto Increment",
         "options": 8,
         "ui": {
@@ -301,7 +301,7 @@
           "widthDefault": 84
         },
         "meta": {
-          "updateAt": 1716791731260,
+          "updateAt": 1716793458768,
           "createAt": 1716462761757
         }
       },
@@ -430,7 +430,7 @@
         "tableId": "Qcgpr3EKzILPyPOht67cv",
         "name": "id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "Int",
         "default": "AI",
         "options": 10,
         "ui": {
@@ -441,7 +441,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716791737492,
+          "updateAt": 1716793456139,
           "createAt": 1716530060924
         }
       },
@@ -470,7 +470,7 @@
         "tableId": "6gWHl0R1-Zt-t6Q4SVibg",
         "name": "id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "",
         "options": 10,
         "ui": {
@@ -481,7 +481,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716791728105,
+          "updateAt": 1716793465273,
           "createAt": 1716530101038
         }
       },
@@ -550,7 +550,7 @@
         "tableId": "6gWHl0R1-Zt-t6Q4SVibg",
         "name": "game_id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "AI",
         "options": 8,
         "ui": {
@@ -561,7 +561,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716791772561,
+          "updateAt": 1716793471002,
           "createAt": 1716530204363
         }
       },
@@ -570,7 +570,7 @@
         "tableId": "Qcgpr3EKzILPyPOht67cv",
         "name": "id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "Auto Increment",
         "options": 8,
         "ui": {
@@ -581,7 +581,7 @@
           "widthDefault": 84
         },
         "meta": {
-          "updateAt": 1716791747107,
+          "updateAt": 1716793478023,
           "createAt": 1716530485682
         }
       },
@@ -590,7 +590,7 @@
         "tableId": "rum5p-OyR-HJxjRWhpcL5",
         "name": "game_id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "Int",
         "default": "AI",
         "options": 8,
         "ui": {
@@ -601,7 +601,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716791737492,
+          "updateAt": 1716793456139,
           "createAt": 1716530520856
         }
       },
@@ -670,7 +670,7 @@
         "tableId": "A_a1TSRsxEnlC8XFt4RUQ",
         "name": "Version_id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "Int",
         "default": "AI",
         "options": 8,
         "ui": {
@@ -681,7 +681,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716792281121,
+          "updateAt": 1716793456139,
           "createAt": 1716791919409
         }
       },
@@ -730,7 +730,7 @@
         "tableId": "A_a1TSRsxEnlC8XFt4RUQ",
         "name": "id",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "",
         "options": 10,
         "ui": {
@@ -741,7 +741,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716792286439,
+          "updateAt": 1716793473789,
           "createAt": 1716792064416
         }
       },
@@ -750,7 +750,7 @@
         "tableId": "6gWHl0R1-Zt-t6Q4SVibg",
         "name": "serverType_ID",
         "comment": "",
-        "dataType": "UUID",
+        "dataType": "int",
         "default": "",
         "options": 8,
         "ui": {
@@ -761,7 +761,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1716792286439,
+          "updateAt": 1716793473789,
           "createAt": 1716792067247
         }
       }
@@ -1016,7 +1016,7 @@
       -1,
       {
         "name": 1716462778420,
-        "dataType": 1716791731259,
+        "dataType": 1716793458766,
         "options(notNull)": 1716462683272,
         "options(primaryKey)": 1716462685300,
         "default": 1716462693557
@@ -1029,7 +1029,7 @@
       {
         "name": 1716462700930,
         "options(primaryKey)": 1716462704814,
-        "dataType": 1716791734597,
+        "dataType": 1716793461434,
         "default": 1716462713189
       }
     ],
@@ -1054,7 +1054,7 @@
       {
         "options(notNull)": 1716462761756,
         "name": 1716462784760,
-        "dataType": 1716791731259,
+        "dataType": 1716793458766,
         "default": 1716462761756,
         "comment": 1716462761756
       }
@@ -1145,7 +1145,7 @@
         "name": 1716530062356,
         "options(primaryKey)": 1716530065731,
         "default": 1716530069242,
-        "dataType": 1716791737491
+        "dataType": 1716793456138
       }
     ],
     "THzS9ah1UDUWZ1PoN6g4l": [
@@ -1172,7 +1172,7 @@
       {
         "name": 1716530102952,
         "options(primaryKey)": 1716530109154,
-        "dataType": 1716791728105
+        "dataType": 1716793465273
       }
     ],
     "_qfY0JciG-BHJb-1-bzRM": [
@@ -1210,7 +1210,7 @@
       {
         "options(notNull)": 1716530204362,
         "name": 1716530224529,
-        "dataType": 1716791737491,
+        "dataType": 1716793471002,
         "default": 1716530204362,
         "comment": 1716530204362
       }
@@ -1228,7 +1228,7 @@
       {
         "options(notNull)": 1716530485680,
         "name": 1716530485680,
-        "dataType": 1716791743619,
+        "dataType": 1716793478022,
         "default": 1716791747106,
         "comment": 1716530485680
       }
@@ -1246,7 +1246,7 @@
       {
         "options(notNull)": 1716530520855,
         "name": 1716530526684,
-        "dataType": 1716791737491,
+        "dataType": 1716793456138,
         "default": 1716530520855,
         "comment": 1716530520855
       }
@@ -1309,7 +1309,7 @@
       {
         "options(notNull)": 1716791919408,
         "name": 1716792281121,
-        "dataType": 1716791919408,
+        "dataType": 1716793456138,
         "default": 1716791919408,
         "comment": 1716791919408
       }
@@ -1353,7 +1353,7 @@
       {
         "options(primaryKey)": 1716792064415,
         "name": 1716792284452,
-        "dataType": 1716792286438
+        "dataType": 1716793473789
       }
     ],
     "48HgtVGFCTGHFpknVBrG-": [
@@ -1363,7 +1363,7 @@
       {
         "options(notNull)": 1716792067247,
         "name": 1716792129262,
-        "dataType": 1716792286438,
+        "dataType": 1716793473789,
         "default": 1716792067247,
         "comment": 1716792067247
       }
