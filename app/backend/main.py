@@ -13,6 +13,8 @@ app = FastAPI()
 serverFilesPath = "app/servers/"
 remoteServerUrl = "http://localhost:6000/"
 
+
+@app.get("/")
 # get all servers
 @app.get("/server/all")
 def getAllServers():

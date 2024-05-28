@@ -966,24 +966,7 @@
     },
     "indexEntities": {},
     "indexColumnEntities": {},
-    "memoEntities": {
-      "bOIdOL2XIxcOZQvFQBym1": {
-        "id": "bOIdOL2XIxcOZQvFQBym1",
-        "value": "",
-        "ui": {
-          "x": 200,
-          "y": 100,
-          "zIndex": 50,
-          "width": 116,
-          "height": 100,
-          "color": ""
-        },
-        "meta": {
-          "updateAt": 1716462736437,
-          "createAt": 1716462736437
-        }
-      }
-    }
+    "memoEntities": {}
   },
   "lww": {
     "settings.databaseName": [
@@ -1040,12 +1023,6 @@
       {
         "name": 1716462724429
       }
-    ],
-    "bOIdOL2XIxcOZQvFQBym1": [
-      "memoEntities",
-      1716462736436,
-      1716462738450,
-      {}
     ],
     "HLrVw7CGyJpA-eYXGRUfV": [
       "tableColumnEntities",

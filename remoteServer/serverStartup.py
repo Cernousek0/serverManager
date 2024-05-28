@@ -13,7 +13,7 @@ def startServer():
 def startUvicorn():
     # start hosting
     print("Starting Server...")
-    uvicorn.run("server:server", port=6000, log_level="debug", reload=True)
+    uvicorn.run("server:server", port=2895, log_level="debug", reload=True)
 
 
 # Server Start

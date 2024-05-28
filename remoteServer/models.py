@@ -13,13 +13,6 @@ class User(Base):
 
     configs = relationship('Config', back_populates='user')
 
-    def output(self):
-        return {
-            "id": self.id,
-            "email": self.email,
-            "created_at": self.created_at
-        }
-
 
 class Config(Base):
     __tablename__ = 'configs'
@@ -33,15 +26,6 @@ class Config(Base):
     user = relationship('User', back_populates='configs')
     game = relationship('Game', back_populates='configs')
 
-    def output(self):
-        return {
-            "id": self.id,
-            "url": self.url,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
-            "user_id": self.user_id,
-            "game_id": self.game_id
-        }
 
 
 class Game(Base):
@@ -51,9 +35,8 @@ class Game(Base):
 
     configs = relationship('Config', back_populates='game')
     types = relationship('Type', back_populates='game')
-    versions = relationship('Version', back_populates='game')
 
-    def output(self):
+    def toArray(self):
         return {
             "id": self.id,
             "name": self.name
@@ -68,12 +51,6 @@ class Type(Base):
     game = relationship('Game', back_populates='types')
     versions = relationship('Version', back_populates='type')
 
-    def output(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "game_id": self.game_id
-        }
 
 
 class Version(Base):
@@ -81,15 +58,6 @@ class Version(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(120), unique=True, nullable=False)
     type_id = Column(Integer, ForeignKey('types.id'), nullable=False)
-    game_id = Column(Integer, ForeignKey('games.id'), nullable=False)
 
     type = relationship('Type', back_populates='versions')
-    game = relationship('Game', back_populates='versions')
     
-    def output(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "type_id": self.type_id,
-            "game_id": self.game_id
-        }

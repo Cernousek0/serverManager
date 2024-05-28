@@ -12,8 +12,8 @@ def startApp():
     startUvicorn()
     
     ## starting React in different thread
-    # WebViewThread = threading.Thread(target=startReact).start()
-    # startWebView()
+    reactThread = threading.Thread(target=startReact).start()
+    startWebView()
 
 
 def startReact():
