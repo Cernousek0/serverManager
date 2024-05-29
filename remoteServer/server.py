@@ -138,8 +138,6 @@ async def upload_config(file: UploadFile = File(...), db: Session = Depends(get_
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=f"Invalid JSON: {str(e)}")
     
-
-
     # Save the file to the server
     os.makedirs(f"{configs_path}/{server_id}", exist_ok=True)
     file_path = os.path.join(f"{configs_path}/{server_id}", f"uploaded_{file.filename}")
@@ -148,13 +146,13 @@ async def upload_config(file: UploadFile = File(...), db: Session = Depends(get_
 
 
     
-
+    # Save the configuration to the database
     game_id = db.query(Game).filter(Game.name == game).first().id
     if not game_id:
         return JSONResponse({"error": "Game is not valid!"})
-    print(game_id)
-    db.add(Config(url=file_path, user_id=4, game_id=game_id.id))
-    # db.commit()
+    db.add(Config(url=file_path, user_id=4, game_id=game_id))
+    db.commit()
+
     return JSONResponse({"status": "File uploaded successfully"})
 
 

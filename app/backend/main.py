@@ -9,6 +9,7 @@ import re
 import time
 import subprocess
 import docker
+import shutil
 
 app = FastAPI()
 
@@ -278,21 +279,19 @@ def createMinecraftVanilla(server_id):
 
     # Create a docker-compose.yml file in the server directory
     docker_compose_content = f"""
-    version: '3.9'
-    services:
-    mc:
+version: '3'
+
+services:
+    minecraft:
         image: itzg/minecraft-server
         container_name: {server_id}
         ports:
-        - "25565:25565"
+            - "25565:25565"
         environment:
-        EULA: "TRUE"
-        VERSION: "LATEST"
+            EULA: "TRUE"
+            VERSION: "LATEST"
         volumes:
-        - ./data:/data
-    volumes:
-    mc_data:
-        driver: local
+            - ./data:/data
     """
     docker_compose_path = os.path.join(server_directory, 'docker-compose.yml')
     with open(docker_compose_path, 'w') as file:
@@ -300,23 +299,38 @@ def createMinecraftVanilla(server_id):
 
     # Run docker-compose up to start the server
     try:
+        print(server_directory)
         subprocess.run(['docker-compose', 'up', '-d'], cwd=server_directory, check=True)
         print(f"Minecraft server '{server_id}' created and started at {server_directory}")
     except subprocess.CalledProcessError as e:
         print(f"Error starting the Minecraft server: {e}")
+        # removeUnsuccesfullServer(server_id)
         return {"error": "Failed to start the server"}
 
     # Verify the container is running
     try:
         container_status = subprocess.check_output(['docker', 'ps', '-f', f"name={server_id}"], cwd=server_directory).decode('utf-8')
         if server_id not in container_status:
-            print("Server container is not running. Please check the Docker logs for more details.")
+            removeUnsuccesfullServer(server_id)
             return {"error": "Server container is not running"}
     except subprocess.CalledProcessError as e:
-        print(f"Error checking container status: {e}")
+        removeUnsuccesfullServer(server_id)
         return {"error": "Failed to check container status"}
 
     return {"status": "Server started successfully"}
+
+def removeUnsuccesfullServer(server_id: str):
+    path = os.path.join(serverFilesPath, server_id)
+    try:
+        shutil.rmtree(path)
+        print(f"Složka {path} byla úspěšně smazána.")
+    except PermissionError as e:
+        print(f"Přístup byl odepřen: {e}")
+    except FileNotFoundError as e:
+        print(f"Složka nebyla nalezena: {e}")
+    except Exception as e:
+        print(f"Došlo k chybě při mazání složky: {e}")
+
 
 
     
