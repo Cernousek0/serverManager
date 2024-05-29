@@ -7,16 +7,19 @@ import uuid
 import requests
 import re
 import time
+import subprocess
+import docker
 
 app = FastAPI()
 
 serverFilesPath = "app/servers/"
-remoteServerUrl = "http://localhost:6000/"
+remoteServerUrl = "http://localhost:2895/"
 
 
 @app.get("/")
-# get all servers
+
 @app.get("/server/all")
+# get all servers
 def getAllServers():
     servers = []
     for folder in os.listdir(serverFilesPath):
@@ -26,8 +29,8 @@ def getAllServers():
 
     return servers
             
-# get selected server console
 @app.get("/server/{server_id}")
+# get selected server console
 def get_server(server_id : str):
 
     if not isServerValid(server_id):
@@ -36,8 +39,85 @@ def get_server(server_id : str):
     serverConfig = getServerConfig(server_id)
     return serverConfig
 
-# create server
+@app.get("/server/{server_id}/logs")
+# get selected server logs
+def get_server_logs(server_id : str):
+    try:
+        # Get the logs from the Docker container
+        logs = subprocess.check_output(['docker', 'logs', server_id]).decode('utf-8')
+        return logs
+    except subprocess.CalledProcessError as e:
+        return {"error": "Failed to get logs"}
+
+@app.get("/server/{server_id}/performance")
+# get selected server performance
+def get_server_performance(server_id : str):
+    client = docker.from_env()
+    server_id = "mc-server"
+    try:
+        container = client.containers.get(server_id)
+        stats = container.stats(stream=False)
+        
+        # CPU usage calculation
+        cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
+        system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
+        number_cpus = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+        cpu_usage = (cpu_delta / system_delta) * number_cpus * 100.0
+        
+        # Memory usage
+        mem_usage = stats['memory_stats']['usage']
+        mem_limit = stats['memory_stats']['limit']
+        mem_percentage = (mem_usage / mem_limit) * 100.0
+
+        # Get disk usage inside the container
+        disk_usage = subprocess.check_output([
+            'docker', 'exec', server_id, 'du', '-sh', '/data'
+        ]).decode('utf-8').split()[0]
+        
+        return {
+        'cpu_usage': cpu_usage,              # Percentage of CPU usage (%)
+        'mem_percentage': mem_percentage,    # Percentage of memory usage (%)
+        'disk_usage': disk_usage             # Disk usage in the container (M)
+    }
+    except docker.errors.NotFound:
+        return {"error": "Container not found"}
+    except Exception as e:
+        return {"error": "An error occurred"}
+
+
+@app.get("/server/{server_id}/players")
+# get selected server players
+def get_server_players(server_id : str):
+
+    client = docker.from_env()
+    container = client.containers.get(server_id)
+
+    # Use the 'rcon-cli' command to execute Minecraft server commands
+    result = container.exec_run('rcon-cli list')
+    output = result.output.decode('utf-8').strip()
+
+    # Print the raw output for debugging
+    print(f"Raw output: {output}")
+
+    # Example output: "There are 1 of a max 20 players online: player1"
+    # Or: "There are 0 of a max 20 players online:"
+    # We need to extract player names from the output
+    if ":" in output:
+        player_part = output.split(":")[1].strip()
+        if player_part:
+            player_list = player_part.split(", ")
+        else:
+            player_list = []
+    else:
+        player_list = []
+    
+    # get number of players joined
+    player_count = len(player_list)
+
+    return json.dumps({"players": player_list, "total": player_count})
+
 @app.post("/server/create")
+# create server
 async def create_server(request: Request):
     payload = await request.json()
 
@@ -45,20 +125,35 @@ async def create_server(request: Request):
     if("error" in config):
         return config
     
-    return downloadServerFiles(config['serverId'], payload["game"], payload["version"], payload["type"])
+    # downloadServerFiles(config['serverId'], payload["game"], payload["version"], payload["type"])
+    if(payload["type"] == "Vanilla"):
+        return createMinecraftVanilla(config["server_id"]), config["server_id"]
 
-
-# delete server
 @app.post("/server/{server_id}/delete")
+# delete server
 def delete_server(server_id: str):
     return {"status": "server deleted", "server_id": server_id}
 
-
-# server controller
 @app.get("/server/{server_id}/start")
+# server controller
 def start_server(server_id: str):
-    return {"status": "server started", "server_id": server_id}
+    # server_directory = os.path.join(serverFilesPath, server_id)
+    # try:
+    #     subprocess.run(['docker-compose', 'up', '-d'], cwd=server_directory, check=True)
+    #     return {"status": "Server started successfully"}
+    # except subprocess.CalledProcessError as e:
+    #     return {"error": "Failed to start the server"}
+    return
 
+@app.post("/server/{server_id}/config/upload")
+# upload server configuration
+async def upload_config(server_id: str):
+    with open(f"{serverFilesPath}/{server_id}/config.json", 'rb') as file:
+        # Send the file via POST request
+        print(f"{remoteServerUrl}/config/upload")
+        response = requests.post(f"{remoteServerUrl}/config/upload", files={'file': file}, data={'server_id': server_id})
+
+    return response.json()
 @app.get("/server/{server_id}/stop")
 def stop_server(server_id: str):
     return {"status": "server stopped"}
@@ -70,15 +165,7 @@ def restart_server(server_id: str):
     start_server(server_id)
 
 
-# json = {
-#     "status": 200,
-#     "server_info": {
-#         "id": "1fd4",
-#         "name": "kar",
-#         "game": "Minecraft"
-#     }
 
-# }
 
 
 # ------ Functions  ---------- #
@@ -103,7 +190,7 @@ def createServerConfig(user_id, name, game, version, created_at, type, mods, plu
         return {"error": "Game not supported"}
     
         ## check if server type is valid
-    if type not in ["forge", "vanilla", "fabric"]:
+    if type not in ["Forge", "Vanilla", "Fabric"]:
         return {"error": "Server type not supported"}
     
     ## check if version is valid
@@ -181,6 +268,55 @@ def isValidVersion(game: str, version: str):
         return version in data["versions"]
     except Exception as e:
         return {"error": f"An error occurred: {e}"}
+    
+
+def createMinecraftVanilla(server_id):
+    
+     # Ensure the server directory exists
+    server_directory = os.path.join(serverFilesPath, server_id)
+    os.makedirs(server_directory, exist_ok=True)
+
+    # Create a docker-compose.yml file in the server directory
+    docker_compose_content = f"""
+    version: '3.9'
+    services:
+    mc:
+        image: itzg/minecraft-server
+        container_name: {server_id}
+        ports:
+        - "25565:25565"
+        environment:
+        EULA: "TRUE"
+        VERSION: "LATEST"
+        volumes:
+        - ./data:/data
+    volumes:
+    mc_data:
+        driver: local
+    """
+    docker_compose_path = os.path.join(server_directory, 'docker-compose.yml')
+    with open(docker_compose_path, 'w') as file:
+        file.write(docker_compose_content)
+
+    # Run docker-compose up to start the server
+    try:
+        subprocess.run(['docker-compose', 'up', '-d'], cwd=server_directory, check=True)
+        print(f"Minecraft server '{server_id}' created and started at {server_directory}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error starting the Minecraft server: {e}")
+        return {"error": "Failed to start the server"}
+
+    # Verify the container is running
+    try:
+        container_status = subprocess.check_output(['docker', 'ps', '-f', f"name={server_id}"], cwd=server_directory).decode('utf-8')
+        if server_id not in container_status:
+            print("Server container is not running. Please check the Docker logs for more details.")
+            return {"error": "Server container is not running"}
+    except subprocess.CalledProcessError as e:
+        print(f"Error checking container status: {e}")
+        return {"error": "Failed to check container status"}
+
+    return {"status": "Server started successfully"}
 
 
     

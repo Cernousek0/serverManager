@@ -30,20 +30,20 @@ function App() {
 
 
     useEffect(() => {
-        // if(!chosenGame.id){
+        if(!chosenGame.id){
             fetch(`${remoteServer}/api/games/all`, {
               method: 'GET',
             })
             .then(response => response.json())
             .then(data => {fetchGames(data)})
-        // }
-        // if(chosenGame.id && !chosenVersion.id){
+        }
+        if(chosenGame.id && !chosenVersion.id){
           fetch(`${remoteServer}/api/types/${chosenGame.id}`,{
             method: 'GET',
           })
           .then(response => response.json())
           .then(data => {fetchTypes(data)})
-        // }
+        }
         if(chosenGame.id && chosenServerType.id){
           fetch(`${remoteServer}/api/versions/${chosenServerType.id}`,{
             method: 'GET',
