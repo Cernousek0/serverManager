@@ -14,3 +14,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.fsize-14 {
+  font-size: 14px !important;
+}
+.fsize-16 {
+  font-size: 16px !important;
+}
+.fsize-18 {
+  font-size: 18px !important;
+}
+.fsize-20 {
+  font-size: 20px !important;
+}
+.fsize-24 {
+  font-size: 24px !important;
+}
+.fsize-28 {
+  font-size: 28px !important;
+}
+.fsize-32 {
+  font-size: 32px !important;
+}
+.fsize-56 {
+  font-size: 56px !important;
+}

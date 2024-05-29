@@ -170,7 +170,7 @@ def restart_server(server_id: str):
 
 # ------ Functions  ---------- #
 
-# check if server exists in files
+# check if server exists in filestructure
 def isServerValid(server_id: str):
     if server_id in os.listdir(serverFilesPath):
         return True
