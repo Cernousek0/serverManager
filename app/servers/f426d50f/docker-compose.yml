@@ -1,0 +1,16 @@
+
+version: '3'
+
+services:
+    minecraft:
+        image: itzg/minecraft-server
+        container_name: f426d50f
+        ports:
+            - "25565:25565"
+        environment:
+            EULA: "TRUE"
+            VERSION: "1.20.2"
+            TYPE: "FORGE"
+        volumes:
+            - ./data:/data
+    

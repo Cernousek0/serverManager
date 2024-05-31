@@ -14,8 +14,9 @@ def startApp():
     ## starting React in different thread
     uvicornProcess = multiprocessing.Process(target=startUvicorn)
     uvicornProcess.start()
-    threading.Thread(target=startReact).start()
-    startWebView(uvicornProcess)
+    # threading.Thread(target=startReact).start()
+    # startWebView(uvicornProcess)
+    startReact()
 
 
 def startReact():

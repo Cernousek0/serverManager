@@ -1,0 +1,12 @@
+{
+   "created_by": 4,
+   "name": "Test",
+   "game": "Minecraft",
+   "version": "1.20.2",
+   "created_at": "2024-05-31",
+   "port": 25565,
+   "ram": 2,
+   "type": "Forge",
+   "mods": {},
+   "plugins": {}
+}
